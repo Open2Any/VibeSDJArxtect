@@ -14,6 +14,7 @@ const serviceStatus = {
   gitlab: { status: 'running', uptime: '20天', pipelines: 156, deployments: '45/week', success_rate: '96.2%' },
   dify: { status: 'running', uptime: '8天', ai_apps: 12, queries: '2.5K/day', models: 5 },
   cluster: { status: 'running', uptime: '30天', services: 15, load_avg: '2.3', requests: '150K/day' },
+  bi_service: { status: 'running', uptime: '15天', dashboards: 28, reports: '180/week', users: 45 },
   alicloud: { status: 'running', uptime: '365天', instances: 8, regions: 3, services: 25 },
   ali_rds: { status: 'running', uptime: '180天', connections: 120, size: '1.8TB', iops: '8000' },
   ali_oss: { status: 'running', uptime: '200天', storage: '15TB', requests: '2.5M/day', cdn: '99.9%' },
@@ -37,6 +38,7 @@ const n8nExamples = [
     description: "监控库存水平，低于阈值时自动通知采购部门",
     steps: ["检查库存数据", "对比安全库存", "生成预警信息", "发送通知", "记录预警日志"]
   },
+
   {
     title: "📱 社交媒体内容发布",
     description: "定时自动发布营销内容到多个社交平台",
@@ -65,6 +67,76 @@ const gitlabExamples = [
     title: "📦 多环境管理",
     description: "自动管理开发、测试、预发布、生产多个环境",
     steps: ["环境检测", "版本管理", "配置部署", "健康检查", "回滚机制"]
+  },
+
+];
+
+// 重点案例展示 - 独立显示的两个主要案例
+const highlightedCases = [
+  {
+    id: "rds-sync",
+    title: "🏪 阿里云RDS数据实时同步案例",
+    subtitle: "商户业务数据智能化处理",
+    description: "通过Flink CDC从阿里云RDS实时同步商品、商家、商家行为数据到私有云，为AI微服务和商品服务提供实时数据支撑",
+    icon: "🔄",
+    color: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    keyFeatures: [
+      "实时监听阿里云RDS数据变更",
+      "自动同步商品、商家、行为数据",
+      "为AI微服务提供实时数据源",
+      "支持商户标签智能生成",
+      "商品推荐算法数据基础"
+    ],
+    techStack: ["Flink CDC", "阿里云RDS", "MySQL", "AI微服务", "商户标签服务"],
+    dataFlow: [
+      { step: 1, name: "阿里云RDS", desc: "商户业务数据源" },
+      { step: 2, name: "Flink CDC", desc: "实时数据同步" },
+      { step: 3, name: "私有云MySQL", desc: "本地数据存储" },
+      { step: 4, name: "AI微服务", desc: "智能分析处理" },
+      { step: 5, name: "业务应用", desc: "标签生成&推荐" }
+    ]
+  },
+  {
+    id: "crawler-pipeline",
+    title: "🕷️ 智能标品数据爬取与更新案例",
+    subtitle: "CI/CD驱动的自动化数据处理",
+    description: "通过CI/CD定时触发爬虫获取最新标品数据，经AI数据清理和质量检验后，自动更新标品服务并通知所有下游服务",
+    icon: "🚀",
+    color: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+    keyFeatures: [
+      "CI/CD定时触发爬虫任务",
+      "AI智能数据清理和标准化",
+      "自动化质量检验和验证",
+      "标品服务自动更新",
+      "下游服务自动通知机制"
+    ],
+    techStack: ["GitLab CI/CD", "Python爬虫", "AI清理服务", "标品微服务", "n8n通知"],
+    dataFlow: [
+      { step: 1, name: "定时触发", desc: "CI/CD Pipeline启动" },
+      { step: 2, name: "数据爬取", desc: "获取最新标品信息" },
+      { step: 3, name: "AI清理", desc: "数据标准化处理" },
+      { step: 4, name: "质量检验", desc: "数据完整性验证" },
+      { step: 5, name: "服务更新", desc: "推送&通知下游" }
+    ]
+  }
+];
+
+// Flink CDC数据同步案例
+const flinkCdcExamples = [
+  {
+    title: "🏪 商户数据实时同步",
+    description: "从阿里云RDS实时同步商品、商家、商家行为数据到私有云，支持AI微服务分析",
+    steps: ["监听RDS变更", "数据提取", "格式转换", "实时同步", "触发下游服务"]
+  },
+  {
+    title: "🏷️ 商户标签智能分析",
+    description: "基于同步的商户行为数据，通过AI微服务生成智能标签和画像",
+    steps: ["行为数据收集", "AI特征提取", "标签生成", "画像构建", "实时更新"]
+  },
+  {
+    title: "🛍️ 商品智能推荐",
+    description: "利用同步的商品和用户数据，为商品微服务提供智能推荐能力",
+    steps: ["数据预处理", "用户画像匹配", "商品特征分析", "推荐算法", "结果输出"]
   }
 ];
 
@@ -191,6 +263,24 @@ const nodeData = {
       '用户服务：用户认证，权限管理，个人中心'
     ]
   },
+  
+  // BI分析层
+  BI1: {
+    label: 'BI数据分析服务',
+    desc: 'BI服务是我们的"数据洞察专家"，基于MySQL数据库中的业务数据，提供强大的商业智能分析能力。它能够从海量的业务数据中挖掘有价值的商业洞察，生成各种可视化报表和仪表板，帮助管理层做出数据驱动的决策。',
+    type: 'analytics',
+    icon: '📊',
+    status: serviceStatus.bi_service,
+    businessValue: '将原始数据转化为商业洞察，支持数据驱动决策，提升业务运营效率和竞争优势。',
+    technicalDetails: '基于Apache Superset/Grafana，支持多数据源连接，提供实时仪表板和定时报表生成。',
+    capabilities: [
+      '销售分析：销售趋势、区域分布、产品表现分析',
+      '用户画像：用户行为分析、留存率、转化率统计',
+      '运营监控：业务指标监控、异常告警、性能分析',
+      '财务报表：收入分析、成本控制、利润率统计',
+      '市场洞察：市场趋势、竞品分析、机会识别'
+    ]
+  },
 
   // 阿里云服务
   ALI_CLOUD: {
@@ -257,6 +347,7 @@ const getNodeStyle = (nodeType, hasStatus = false) => {
     database: '#dc3545',
     data: '#17a2b8',
     compute: '#6f42c1',
+    analytics: '#673ab7',
     ai: '#fd7e14',
     automation: '#e83e8c',
     cicd: '#20c997',
@@ -434,9 +525,9 @@ const nodes = [
     id: 'group-compute',
     type: 'groupNode',
     data: { 
-      title: '⚡ 微服务计算层',
+      title: '⚡ 计算分析层',
       color: '#6f42c1',
-      width: 180,
+      width: 400,
       height: 120
     },
     position: { x: 320, y: 690 },
@@ -575,6 +666,15 @@ const nodes = [
     position: { x: 400, y: 730 },
     zIndex: 10
   },
+  
+  // BI分析层
+  { 
+    id: 'BI1', 
+    type: 'customNode',
+    data: { label: nodeData.BI1.label, id: 'BI1' }, 
+    position: { x: 550, y: 730 },
+    zIndex: 10
+  },
 
   // 阿里云服务节点
   { 
@@ -624,6 +724,10 @@ const edges = [
   { id: 'eB-STORE3', source: 'B', target: 'STORE3', style: { stroke: '#17a2b8', strokeWidth: 3 } },
   
   { id: 'eB-COMPUTE1', source: 'B', target: 'COMPUTE1', style: { stroke: '#6f42c1', strokeWidth: 3 } },
+  { id: 'eB-BI1', source: 'B', target: 'BI1', style: { stroke: '#673ab7', strokeWidth: 3 } },
+  
+  // BI服务连接到数据库
+  { id: 'eSTORE1-BI1', source: 'STORE1', target: 'BI1', style: { stroke: '#673ab7', strokeWidth: 3 } },
   
   // 私有云数据同步连接
   { id: 'eSTORE3-STORE1', source: 'STORE3', target: 'STORE1', animated: true, style: { stroke: '#17a2b8', strokeWidth: 3 } },
@@ -899,6 +1003,21 @@ export default function App() {
     );
   };
 
+  const renderCapabilities = (capabilities) => {
+    if (!capabilities) return null;
+    
+    return (
+      <div style={{ marginTop: 16, padding: 12, background: '#f3e5f5', borderRadius: 8 }}>
+        <div style={{ color: '#673ab7', fontWeight: 'bold', marginBottom: 8 }}>📊 BI分析能力</div>
+        {capabilities.map((capability, index) => (
+          <div key={index} style={{ color: '#512da8', fontSize: 14, marginBottom: 4 }}>
+            • {capability}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   const renderExamples = (examples, title, bgColor, titleColor) => {
     if (!examples) return null;
     
@@ -1022,7 +1141,8 @@ export default function App() {
         borderRadius: 12,
         boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
         backdropFilter: 'blur(10px)',
-        position: 'relative'
+        position: 'relative',
+        marginTop: '20px'
       }}>
         <ReactFlow
           nodes={nodes}
@@ -1053,6 +1173,162 @@ export default function App() {
           />
           <Background color="#f0f0f0" gap={20} />
         </ReactFlow>
+      </div>
+
+      {/* 重点案例展示区域 */}
+      <div style={{
+        padding: '20px 32px',
+        background: 'rgba(255,255,255,0.95)',
+        backdropFilter: 'blur(10px)',
+        marginTop: 20
+      }}>
+        <div style={{
+          fontSize: 18,
+          fontWeight: 'bold',
+          color: '#333',
+          marginBottom: 16,
+          textAlign: 'center'
+        }}>
+          ⭐ 核心业务案例展示
+        </div>
+        
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))',
+          gap: 20,
+          maxWidth: '1200px',
+          margin: '0 auto'
+        }}>
+          {highlightedCases.map((caseItem, index) => (
+            <div key={caseItem.id} style={{
+              background: 'white',
+              borderRadius: 12,
+              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+              overflow: 'hidden',
+              border: '1px solid rgba(0,0,0,0.1)'
+            }}>
+              {/* 案例头部 */}
+              <div style={{
+                background: caseItem.color,
+                padding: '16px 20px',
+                color: 'white'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12,
+                  marginBottom: 8
+                }}>
+                  <span style={{ fontSize: 24 }}>{caseItem.icon}</span>
+                  <div>
+                    <div style={{ fontSize: 16, fontWeight: 'bold' }}>
+                      {caseItem.title}
+                    </div>
+                    <div style={{ fontSize: 12, opacity: 0.9 }}>
+                      {caseItem.subtitle}
+                    </div>
+                  </div>
+                </div>
+                <div style={{ fontSize: 14, lineHeight: 1.4, opacity: 0.95 }}>
+                  {caseItem.description}
+                </div>
+              </div>
+
+              {/* 案例内容 */}
+              <div style={{ padding: '20px' }}>
+                {/* 核心特性 */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontSize: 14, fontWeight: 'bold', color: '#333', marginBottom: 8 }}>
+                    🎯 核心特性
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                    {caseItem.keyFeatures.map((feature, idx) => (
+                      <div key={idx} style={{
+                        background: '#f8f9fa',
+                        padding: '4px 8px',
+                        borderRadius: 4,
+                        fontSize: 12,
+                        color: '#495057',
+                        border: '1px solid #e9ecef'
+                      }}>
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 技术栈 */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontSize: 14, fontWeight: 'bold', color: '#333', marginBottom: 8 }}>
+                    🛠️ 技术栈
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                    {caseItem.techStack.map((tech, idx) => (
+                      <div key={idx} style={{
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        color: 'white',
+                        padding: '2px 8px',
+                        borderRadius: 12,
+                        fontSize: 11,
+                        fontWeight: 'bold'
+                      }}>
+                        {tech}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 数据流程 */}
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 'bold', color: '#333', marginBottom: 8 }}>
+                    📊 数据流程
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                    {caseItem.dataFlow.map((flow, idx) => (
+                      <React.Fragment key={idx}>
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 6,
+                          background: '#f8f9fa',
+                          padding: '6px 10px',
+                          borderRadius: 6,
+                          border: '1px solid #dee2e6'
+                        }}>
+                          <div style={{
+                            width: 20,
+                            height: 20,
+                            borderRadius: '50%',
+                            background: caseItem.color,
+                            color: 'white',
+                            fontSize: 10,
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}>
+                            {flow.step}
+                          </div>
+                          <div>
+                            <div style={{ fontSize: 11, fontWeight: 'bold', color: '#333' }}>
+                              {flow.name}
+                            </div>
+                            <div style={{ fontSize: 10, color: '#666' }}>
+                              {flow.desc}
+                            </div>
+                          </div>
+                        </div>
+                        {idx < caseItem.dataFlow.length - 1 && (
+                          <div style={{ color: '#666', fontSize: 12 }}>→</div>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* 详情模态框 */}
@@ -1117,6 +1393,7 @@ export default function App() {
             {renderStatusDetails(modal.status)}
             {renderSyncFeatures(modal.syncFeatures)}
             {renderServicesList(modal.services)}
+            {renderCapabilities(modal.capabilities)}
             {modal.examples && renderExamples(modal.examples, '🚀 应用示例', '#fce4ec', '#c2185b')}
           </div>
         </div>
